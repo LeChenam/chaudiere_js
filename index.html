@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>index td8 : fetch</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <h1>La Chaudière</h1>
+    <div id="listEvents">
+
+    </div>
+    <script id="eventsTemplate" type="text/x-handlebars-template">
+    <h2>Liste des événements :</h2>
+        <ul>
+            {{#each events}}
+                <li>{{ this.titre}}</li>
+            {{/each}}
+        </ul>
+    </script>
+    <script  src='out.js' defer ></script>
+</body>
