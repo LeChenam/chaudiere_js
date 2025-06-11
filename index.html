@@ -7,10 +7,19 @@
 </head>
 <body>
     <h1>La Chaudière</h1>
-    <div id="listEvents">
-
+    <div id="filtreCateg">
     </div>
-
+    <div id="listEvents">
+    </div>
+    <script id="filtreCategTemplate" type="text/x-handlebars-template">
+        <h2>Filtrer par catégorie :</h2>
+        <select id="categorySelect" onchange="filterEventsByCategory()">
+            <option value="">Toutes les catégories</option>
+            {{#each categories}}
+                <option value="{{this.id}}">{{this.libelle}}</option>
+            {{/each}}
+        </select>
+    </script>
     <script id="eventsTemplate" type="text/x-handlebars-template">
         <h2>Liste des événements :</h2>
         <ul>

@@ -1118,7 +1118,7 @@
     "node_modules/handlebars/dist/cjs/handlebars/no-conflict.js"(exports, module) {
       "use strict";
       exports.__esModule = true;
-      exports["default"] = function(Handlebars4) {
+      exports["default"] = function(Handlebars5) {
         (function() {
           if (typeof globalThis === "object") return;
           Object.prototype.__defineGetter__("__magic__", function() {
@@ -1128,11 +1128,11 @@
           delete Object.prototype.__magic__;
         })();
         var $Handlebars = globalThis.Handlebars;
-        Handlebars4.noConflict = function() {
-          if (globalThis.Handlebars === Handlebars4) {
+        Handlebars5.noConflict = function() {
+          if (globalThis.Handlebars === Handlebars5) {
             globalThis.Handlebars = $Handlebars;
           }
-          return Handlebars4;
+          return Handlebars5;
         };
       };
       module.exports = exports["default"];
@@ -5739,9 +5739,14 @@
   // js/affichage_evenements.js
   function displayEvents() {
     return __async(this, null, function* () {
+      var _a;
       try {
-        const events = yield getCurrentEvents(yield getEvents());
+        let events = getCurrentEvents(yield getEvents());
         const categories = yield getCategories();
+        const selectedCategory = (_a = document.querySelector("#categorySelect")) == null ? void 0 : _a.value;
+        if (selectedCategory) {
+          events = events.filter((event) => event.categorie_id === Number(selectedCategory));
+        }
         if (!Array.isArray(events) || events.length === 0) {
           document.querySelector("#listEvents").innerHTML = "<p>No events found.</p>";
           return;
@@ -5758,12 +5763,12 @@
   function getEvents() {
     return __async(this, null, function* () {
       try {
-        const response = yield fetch("http://localhost:13000/api/evenements");
+        const response = yield fetch("http://localhost:13000/api/evenements", { method: "GET" });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = yield response.json();
-        return data.evenement || [];
+        return Array.isArray(data.evenement) ? data.evenement : [];
       } catch (error) {
         console.error("Unable to fetch events:", error);
         return [];
@@ -5775,16 +5780,46 @@
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
     return events.filter((event) => {
-      const eventDate = new Date(event.date_debut);
+      var _a;
+      const eventDate = new Date((_a = event == null ? void 0 : event.date_debut) != null ? _a : null);
       return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
     });
   }
 
   // index.js
+  var import_handlebars4 = __toESM(require_handlebars());
+
+  // js/filtre.js
   var import_handlebars3 = __toESM(require_handlebars());
-  import_handlebars3.default.registerHelper("eq", function(a, b) {
+  function filtreParCateg() {
+    return __async(this, null, function* () {
+      try {
+        const categories = yield getCategories();
+        if (!Array.isArray(categories) || categories.length === 0) {
+          document.querySelector("#filtreCateg").innerHTML = "<p>Aucune cat\xE9gorie disponible.</p>";
+          return;
+        }
+        const filtreTemplate = document.querySelector("#filtreCategTemplate").innerHTML;
+        const template = import_handlebars3.default.compile(filtreTemplate);
+        document.querySelector("#filtreCateg").innerHTML = template({ categories });
+      } catch (error) {
+        console.error("Erreur lors du chargement des cat\xE9gories :", error);
+        document.querySelector("#filtreCateg").innerHTML = "<p>Impossible de charger les cat\xE9gories.</p>";
+      }
+    });
+  }
+  function filterEventsByCategory() {
+    const categorySelect = document.querySelector("#categorySelect");
+    const selectedCategory = categorySelect.value;
+    displayEvents(selectedCategory);
+  }
+
+  // index.js
+  window.filterEventsByCategory = filterEventsByCategory;
+  import_handlebars4.default.registerHelper("eq", function(a, b) {
     return a === b;
   });
+  filtreParCateg();
   displayEvents();
 })();
 //# sourceMappingURL=out.js.map
