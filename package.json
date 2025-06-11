@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "esbuild": "^0.25.4",
-    "handlebars": "^4.7.8"
+    "handlebars": "^4.7.8",
+    "serve": "^14.2.4"
   },
   "scripts": {
     "build": "esbuild index.js --bundle  --sourcemap --target=es2015 --outfile=out.js",

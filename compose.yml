@@ -1,0 +1,13 @@
+services:
+  app:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: bash -c "
+      npm install &&
+      npx esbuild index.js --bundle --sourcemap --target=es2015 --outfile=out.js &&
+      npx serve . -l 3000"
+    ports:
+      - "13009:3000"
+    stdin_open: true
