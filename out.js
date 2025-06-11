@@ -1118,7 +1118,7 @@
     "node_modules/handlebars/dist/cjs/handlebars/no-conflict.js"(exports, module) {
       "use strict";
       exports.__esModule = true;
-      exports["default"] = function(Handlebars2) {
+      exports["default"] = function(Handlebars4) {
         (function() {
           if (typeof globalThis === "object") return;
           Object.prototype.__defineGetter__("__magic__", function() {
@@ -1128,11 +1128,11 @@
           delete Object.prototype.__magic__;
         })();
         var $Handlebars = globalThis.Handlebars;
-        Handlebars2.noConflict = function() {
-          if (globalThis.Handlebars === Handlebars2) {
+        Handlebars4.noConflict = function() {
+          if (globalThis.Handlebars === Handlebars4) {
             globalThis.Handlebars = $Handlebars;
           }
-          return Handlebars2;
+          return Handlebars4;
         };
       };
       module.exports = exports["default"];
@@ -5716,18 +5716,39 @@
   });
 
   // js/affichage_evenements.js
+  var import_handlebars2 = __toESM(require_handlebars());
+
+  // js/affichage_categories.js
   var import_handlebars = __toESM(require_handlebars());
+  function getCategories() {
+    return __async(this, null, function* () {
+      try {
+        const response = yield fetch("http://localhost:13000/api/categories");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = yield response.json();
+        return data.categories;
+      } catch (error) {
+        console.error("Unable to fetch categories:", error);
+        return [];
+      }
+    });
+  }
+
+  // js/affichage_evenements.js
   function displayEvents() {
     return __async(this, null, function* () {
       try {
-        const events = yield getEvents();
+        const events = yield getCurrentEvents(yield getEvents());
+        const categories = yield getCategories();
         if (!Array.isArray(events) || events.length === 0) {
           document.querySelector("#listEvents").innerHTML = "<p>No events found.</p>";
           return;
         }
         const eventTemplate = document.querySelector("#eventsTemplate").innerHTML;
-        const template = import_handlebars.default.compile(eventTemplate);
-        document.querySelector("#listEvents").innerHTML = template({ events });
+        const template = import_handlebars2.default.compile(eventTemplate);
+        document.querySelector("#listEvents").innerHTML = template({ events, categories });
       } catch (error) {
         console.error("Error displaying events:", error);
         document.querySelector("#listEvents").innerHTML = "<p>Unable to display events.</p>";
@@ -5736,21 +5757,34 @@
   }
   function getEvents() {
     return __async(this, null, function* () {
-      const api = yield fetch("http://localhost:13000/api/evenements").then((response) => {
+      try {
+        const response = yield fetch("http://localhost:13000/api/evenements");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.json();
-      }).catch((error) => {
-        console.error("Unable to fetch events : ", error);
+        const data = yield response.json();
+        return data.evenement || [];
+      } catch (error) {
+        console.error("Unable to fetch events:", error);
         return [];
-      });
-      console.log(api.evenements);
-      return api.evenements;
+      }
+    });
+  }
+  function getCurrentEvents(events) {
+    const currentDate = /* @__PURE__ */ new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    return events.filter((event) => {
+      const eventDate = new Date(event.date_debut);
+      return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
     });
   }
 
   // index.js
+  var import_handlebars3 = __toESM(require_handlebars());
+  import_handlebars3.default.registerHelper("eq", function(a, b) {
+    return a === b;
+  });
   displayEvents();
 })();
 //# sourceMappingURL=out.js.map

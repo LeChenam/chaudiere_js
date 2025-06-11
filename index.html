@@ -10,11 +10,23 @@
     <div id="listEvents">
 
     </div>
+
     <script id="eventsTemplate" type="text/x-handlebars-template">
-    <h2>Liste des événements :</h2>
+        <h2>Liste des événements :</h2>
         <ul>
             {{#each events}}
-                <li>{{ this.titre}}</li>
+                <li>
+                    <div class="event-item">
+                        <h3>{{this.titre}}</h3>
+                        <p><strong>Catégorie :</strong>
+                            {{#each ../categories}}
+                                {{#if (eq this.id ../this.categorie_id)}}
+                                    {{this.libelle}}
+                                {{/if}}
+                            {{/each}}</p>
+                        <p><strong>Date :</strong> {{this.date_debut}}</p>
+                    </div>
+                </li>
             {{/each}}
         </ul>
     </script>
