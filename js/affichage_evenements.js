@@ -2,8 +2,12 @@ import Handlebars from 'handlebars';
 import { getCategories } from './affichage_categories.js';
 export async function displayEvents() {
     try {
-        const events = await getCurrentEvents(await getEvents());
+        let events = getCurrentEvents(await getEvents());
         const categories = await getCategories();
+        const selectedCategory = document.querySelector('#categorySelect')?.value;
+        if (selectedCategory) {
+            events = events.filter(event => event.categorie_id === Number(selectedCategory));
+        }
         if (!Array.isArray(events) || events.length === 0) {
             document.querySelector('#listEvents').innerHTML = '<p>No events found.</p>';
             return;
@@ -20,12 +24,12 @@ export async function displayEvents() {
 
 export async function getEvents() {
     try {
-        const response = await fetch('http://localhost:13000/api/evenements');
+        const response = await fetch('http://localhost:13000/api/evenements', { method: 'GET' });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        return data.evenement || [];
+        return Array.isArray(data.evenement) ? data.evenement : [];
     } catch (error) {
         console.error('Unable to fetch events:', error);
         return [];
@@ -37,7 +41,7 @@ export function getCurrentEvents(events) {
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
     return events.filter(event => {
-        const eventDate = new Date(event.date_debut);
+        const eventDate = new Date(event?.date_debut ?? null);
         return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
     });
 }
