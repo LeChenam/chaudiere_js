@@ -88,6 +88,27 @@
         </ul>
     </div>
 </script>
+    <script id="eventTemplate" type="text/x-handlebars-template">
+        <div id="eventDetails">
+            <h2>{{event.titre}}</h2>
+            <p><strong>Tarif :</strong> {{event.tarif}}</p>
+            <p><strong>Catégorie :</strong>
+                {{#each categories}}
+                    {{#if (eq this.id ../event.categorie_id)}}
+                        {{this.libelle}}
+                    {{/if}}
+                {{/each}}</p>
+            {{#if event.image}}
+                <img src="{{event.image}}" alt="{{event.titre}}" class="event-image">
+            {{/if}}
+            <p><strong>Date :</strong> {{event.date_debut}}</p>
+            {{#if event.date_fin != null}}
+                <p><strong>Date de fin :</strong> {{event.date_fin}}</p>
+            {{/if}}
+            <p><strong>Description :</strong> {{event.description}}</p>
+        </div>
+    </script>
+    <script  src='out.js' defer ></script>
 
 <script id="simplifyEventsTemplate" type="text/x-handlebars-template">
     <ul>
