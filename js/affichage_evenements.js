@@ -6,7 +6,6 @@ import {allEvents, load} from "./load";
 export async function displayEvents() {
     try {
         let events = getCurrentEvents(await getEvents());
-        console.log(events);
         const categories = await getCategories();
         const selectedCategory = document.querySelector('#categorySelect')?.value;
         events = filtreParCateg(selectedCategory, events);
