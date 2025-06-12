@@ -2,6 +2,7 @@ import Handlebars from 'handlebars';
 import { getCategories } from './affichage_categories.js';
 import {displayFiltreParCateg, filtreParCateg} from "./filtre";
 import {log} from "../out";
+import {allEvents, load} from "./load";
 export async function displayEvents() {
     try {
         let events = getCurrentEvents(await getEvents());
@@ -24,17 +25,9 @@ export async function displayEvents() {
 }
 
 export async function getEvents() {
-    try {
-        const response = await fetch('http://localhost:13000/api/evenements', { method: 'GET' });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return Array.isArray(data.evenement) ? data.evenement : [];
-    } catch (error) {
-        console.error('Unable to fetch events:', error);
-        return [];
-    }
+    if (allEvents === null) {
+        await load();
+    }return allEvents;
 }
 
 export function getCurrentEvents(events) {

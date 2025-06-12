@@ -3,3 +3,5 @@ package-lock.json
 .idea
 out.js
 out.js.map
+out
+out..map

@@ -9,7 +9,7 @@
     <div id="navbar">
         <nav>
             <ul>
-                <!--<li><a onclick="displayAccueil()">Accueil</a></li>-->
+                <li><a onclick="displayAccueil()">Accueil</a></li>
                 <li><a onclick="displayFiltreNEvents()">Événements</a></li>
                 <!--<li><a onclick="displayCategories()">Categories</a></li>-->
             </ul>
@@ -17,6 +17,14 @@
     </div>
     <h1>La Chaudière</h1>
     <div id="body"></div>
+
+    <script id="accueilTemplate" type="text/x-handlebars-template">
+        <div id="accueil">
+            <h2>Bienvenue à La Chaudière !</h2>
+            <p>Découvrez nos événements à venir !</p>
+        </div>
+    </script>
+
     <script id="filtreCategTemplate" type="text/x-handlebars-template">
         <div id="filtreCateg">
         <h2>Filtrer par catégorie :</h2>

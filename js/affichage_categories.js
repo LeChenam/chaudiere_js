@@ -1,15 +1,12 @@
 import Handlebars from 'handlebars';
+import {allCategories, load} from "./load";
 
 export async function getCategories() {
-    try {
-        const response = await fetch('http://localhost:13000/api/categories');
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data.categories;
-    } catch (error) {
-        console.error('Unable to fetch categories:', error);
-        return [];
-    }
+    if (allCategories === null) {
+        await load();
+    }return allCategories;
+}
+
+export async function displayCategories() {
+
 }
