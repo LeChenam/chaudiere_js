@@ -37,13 +37,24 @@
             {{/each}}
         </select>
     </div>
-    <div class="listEvents"></div>
+    <div id="listEvents"></div>
 </script>
 
 <script id="filtreTempsTemplate" type="text/x-handlebars-template">
     <div id="filtreTemps">
         <label for="tempsSelect">Filtrer par période :</label>
         <select id="tempsSelect" onchange="displayEvents()">
+            <option value="present">mois courant</option>
+            <option value="past">passé</option>
+            <option value="future">futur</option>
+        </select>
+    </div>
+</script>
+
+<script id="simplifyFiltreTempsTemplate" type="text/x-handlebars-template">
+    <div id="filtreTemps-{{this.id}}">
+        <label for="tempsSelect-{{this.id}}">Filtrer par période :</label>
+        <select id="tempsSelect-{{this.id}}" onchange="displayEvents(true, '{{this.id}}')">
             <option value="present">mois courant</option>
             <option value="past">passé</option>
             <option value="future">futur</option>
@@ -80,8 +91,8 @@
                 <li>
                     <span class="category-item" onclick="toggleCategoryEvents('{{this.id}}')">{{this.libelle}}</span>
                     <div id="eventsForCategory-{{this.id}}" class="category-events" style="display: none;">
-                        <div id="filtreTemps"></div>
-                        <div class="listEvents"></div>
+                        <div id="filtreTemps-{{this.id}}"></div>
+                        <div id="listEvents-{{this.id}}"></div>
                     </div>
                 </li>
             {{/each}}
@@ -102,7 +113,7 @@
                 <img src="{{event.image}}" alt="{{event.titre}}" class="event-image">
             {{/if}}
             <p><strong>Date :</strong> {{event.date_debut}}</p>
-            {{#if event.date_fin != null}}
+            {{#if event.date_fin}}
                 <p><strong>Date de fin :</strong> {{event.date_fin}}</p>
             {{/if}}
             <p><strong>Description :</strong> {{event.description}}</p>

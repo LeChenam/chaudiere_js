@@ -24,10 +24,10 @@ export function displayFiltreParTemps() {
     document.querySelector('#body').innerHTML = template();
 }
 
-export function displaySimplifyFiltreParTemps(id) {
+export function displaySimplifyFiltreTemps(id) {
     const filtreTemplate = document.querySelector('#simplifyFiltreTempsTemplate').innerHTML;
     const template = Handlebars.compile(filtreTemplate);
-    document.querySelector('#filtreTemps').innerHTML = template({id: id});
+    document.querySelector(`#filtreTemps-${id}`).innerHTML = template({id: id});
 }
 
 export function filtreParCateg(categId, events) {
@@ -40,6 +40,7 @@ export function filtreParCateg(categId, events) {
 }
 
 export function filtreParTemps(temps, events) {
+    console.log('Filtre par temps:', temps, 'pour', events.length, 'événements');
     if (temps === null || temps === "") {
         return events;
     } else {
