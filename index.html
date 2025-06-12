@@ -6,83 +6,100 @@
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <div id="navbar">
-        <nav>
-            <ul>
-                <li><a onclick="displayAccueil()">Accueil</a></li>
-                <li><a onclick="displayFiltreNEvents()">Événements</a></li>
-                <li><a onclick="displayCategories()">Categories</a></li>
-            </ul>
-        </nav>
-    </div>
-    <h1>La Chaudière</h1>
-    <div id="body">
-        <div id="loadingIndicator">Chargement de la page, veuillez patienter...</div>
-    </div>
+<div id="navbar">
+    <nav>
+        <ul>
+            <li><a onclick="displayAccueil()">Accueil</a></li>
+            <li><a onclick="displayFiltreNEvents()">Événements</a></li>
+            <li><a onclick="displayCategories()">Categories</a></li>
+        </ul>
+    </nav>
+</div>
+<h1>La Chaudière</h1>
+<div id="body">
+    <div id="loadingIndicator">Chargement de la page, veuillez patienter...</div>
+</div>
 
-    <script id="accueilTemplate" type="text/x-handlebars-template">
-        <div id="accueil">
-            <h2>Bienvenue à La Chaudière !</h2>
-            <p>Découvrez nos événements à venir !</p>
-        </div>
-    </script>
+<script id="accueilTemplate" type="text/x-handlebars-template">
+    <div id="accueil">
+        <h2>Bienvenue à La Chaudière !</h2>
+        <p>Découvrez nos événements à venir !</p>
+    </div>
+</script>
 
-    <script id="filtreCategTemplate" type="text/x-handlebars-template">
-        <div id="filtreCateg">
-        <h2>Filtrer par catégorie :</h2>
+<script id="filtreCategTemplate" type="text/x-handlebars-template">
+    <div id="filtreCateg">
+        <label for="categorySelect">Filtrer par catégorie :</label>
         <select id="categorySelect" onchange="displayEvents()">
             <option value="">Toutes les catégories</option>
             {{#each categories}}
                 <option value="{{this.id}}">{{this.libelle}}</option>
             {{/each}}
         </select>
-        </div>
-        <div id="listEvents"></div>
-    </script>
-    <script id="eventsTemplate" type="text/x-handlebars-template">
-        <h2>Liste des événements :</h2>
-        <ul>
-            {{#each events}}
-                <li>
-                    <div class="event-item">
-                        <h3>{{this.titre}}</h3>
-                        <p><strong>Catégorie :</strong>
-                            {{#each ../categories}}
-                                {{#if (eq this.id ../this.categorie_id)}}
-                                    {{this.libelle}}
-                                {{/if}}
-                            {{/each}}</p>
-                        <p><strong>Date :</strong> {{this.date_debut}}</p>
-                    </div>
-                </li>
-            {{/each}}
-        </ul>
-    </script>
+    </div>
+    <div class="listEvents"></div>
+</script>
 
-    <script id="categoriesTemplate" type="text/x-handlebars-template">
-        <div id="listCategories">
+<script id="filtreTempsTemplate" type="text/x-handlebars-template">
+    <div id="filtreTemps">
+        <label for="tempsSelect">Filtrer par période :</label>
+        <select id="tempsSelect" onchange="displayEvents()">
+            <option value="present">mois courant</option>
+            <option value="past">passé</option>
+            <option value="future">futur</option>
+        </select>
+    </div>
+</script>
+
+<script id="eventsTemplate" type="text/x-handlebars-template">
+    <h2>Liste des événements :</h2>
+    <ul>
+        {{#each events}}
+            <li>
+                <div class="event-item">
+                    <h3>{{this.titre}}</h3>
+                    <p><strong>Catégorie :</strong>
+                        {{#each ../categories}}
+                            {{#if (eq this.id ../this.categorie_id)}}
+                                {{this.libelle}}
+                            {{/if}}
+                        {{/each}}
+                    </p>
+                    <p><strong>Date :</strong> {{this.date_debut}}</p>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</script>
+
+<script id="categoriesTemplate" type="text/x-handlebars-template">
+    <div id="listCategories">
         <h2>Liste des catégories :</h2>
         <ul>
             {{#each categories}}
                 <li>
                     <span class="category-item" onclick="toggleCategoryEvents('{{this.id}}')">{{this.libelle}}</span>
-                    <div id="eventsForCategory-{{this.id}}" class="category-events" style="display: none;"></div>
+                    <div id="eventsForCategory-{{this.id}}" class="category-events" style="display: none;">
+                        <div id="filtreTemps"></div>
+                        <div class="listEvents"></div>
+                    </div>
                 </li>
             {{/each}}
         </ul>
-        </div>
-    </script>
-    <script id="simplifyEventsTemplate" type="text/x-handlebars-template">
-        <ul>
-            {{#each events}}
-                <li>
-                    <div class="simplify-event-item">
-                        <h3>{{this.titre}}</h3>
-                        <p><strong>Date :</strong> {{this.date_debut}}</p>
-                </li>
-            {{/each}}
-        </ul>
-    </script>
-    <script  src='out.js' defer ></script>
+    </div>
+</script>
 
+<script id="simplifyEventsTemplate" type="text/x-handlebars-template">
+    <ul>
+        {{#each events}}
+            <li>
+                <h3>{{this.titre}}</h3>
+                <p><strong>Date :</strong> {{this.date_debut}}</p>
+            </li>
+        {{/each}}
+    </ul>
+</script>
+
+<script src="out.js" defer></script>
 </body>
+</html>

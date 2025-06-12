@@ -1,45 +1,45 @@
 import Handlebars from 'handlebars';
-import { getCategories } from './affichage_categories.js';
-import {displayFiltreParCateg, filtreParCateg} from "./filtre";
-import {log} from "../out";
-import {allEvents, load} from "./load";
-export async function displayEvents() {
+import {
+    displayFiltreParCateg,
+    displayFiltreParTemps,
+    displaySimplifyFiltreParTemps,
+    filtreParCateg,
+    filtreParTemps
+} from "./filtre";
+import {allCategories, allEvents, load} from "./load";
+export function displayEvents(simplify = false, categId = null) {
     try {
-        let events = getCurrentEvents(await getEvents());
-        const categories = await getCategories();
-        const selectedCategory = document.querySelector('#categorySelect')?.value;
+        let events = filtreParTemps(document.querySelector('#tempsSelect')?.value, allEvents);
+        const selectedCategory = categId || document.querySelector('#categorySelect')?.value;
         events = filtreParCateg(selectedCategory, events);
-        console.log(events);
+
         if (!Array.isArray(events) || events.length === 0) {
-            document.querySelector('#listEvents').innerHTML += '<p>No events found.</p>';
+            document.querySelector('.listEvents').innerHTML = '<p>No events found.</p>';
             return;
         }
-        const eventTemplate = document.querySelector('#eventsTemplate').innerHTML;
-        const template = Handlebars.compile(eventTemplate);
-        document.querySelector('#listEvents').innerHTML = template({ events, categories });
+
+        const templateId = simplify ? '#simplifyEventsTemplate' : '#eventsTemplate';
+        const templateElement = document.querySelector(templateId);
+        if (!templateElement) {
+            console.error(`Template ${templateId} not found`);
+            return;
+        }
+
+        const template = Handlebars.compile(templateElement.innerHTML);
+        document.querySelector('.listEvents').innerHTML = template({events, categories: allCategories});
     } catch (error) {
         console.error('Error displaying events:', error);
-        document.querySelector('#listEvents').innerHTML = '<p>Unable to display events.</p>';
+        document.querySelector('.listEvents').innerHTML = '<p>Unable to display events.</p>';
     }
 }
 
-export async function getEvents() {
-    if (allEvents === null) {
-        await load();
-    }return allEvents;
-}
-
-export function getCurrentEvents(events) {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-    return events.filter(event => {
-        const eventDate = new Date(event?.date_debut ?? null);
-        return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
-    });
-}
-
 export function displayFiltreNEvents(){
+    displayFiltreParTemps();
     displayFiltreParCateg();
     displayEvents();
+}
+
+export function displaySimplifyFiltreNEvents(categId){
+    displaySimplifyFiltreParTemps(categId);
+    displayEvents(true, categId);
 }

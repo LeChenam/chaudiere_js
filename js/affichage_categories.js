@@ -1,16 +1,11 @@
 import Handlebars from 'handlebars';
 import {allCategories, allEvents, load} from "./load";
 import {filtreParCateg} from "./filtre";
+import {displaySimplifyFiltreNEvents} from "./affichage_evenements";
 
-export async function getCategories() {
-    if (allCategories === null) {
-        await load();
-    }return allCategories;
-}
-
-export async function displayCategories() {
+export function displayCategories() {
     try {
-        const categories = await getCategories();
+        const categories = allCategories;
         if (!Array.isArray(categories) || categories.length === 0) {
             document.querySelector('#body').innerHTML += '<p>No categories found.</p>';
             return;
@@ -28,10 +23,9 @@ export function toggleCategoryEvents(categoryId) {
     const eventsContainer = document.querySelector(`#eventsForCategory-${categoryId}`);
     if (eventsContainer.style.display === 'none') {
         const events = filtreParCateg(categoryId, allEvents);
+        console.log(`Events for category ${categoryId}:`, events);
         if (events.length > 0) {
-            const eventTemplate = document.querySelector('#simplifyEventsTemplate').innerHTML;
-            const template = Handlebars.compile(eventTemplate);
-            eventsContainer.innerHTML = template({ events });
+            displaySimplifyFiltreNEvents(categoryId);
         } else {
             eventsContainer.innerHTML = '<p>Aucun événement trouvé pour cette catégorie.</p>';
         }
