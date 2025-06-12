@@ -1,9 +1,7 @@
-import {displayEvents} from "./js/affichage_evenements";
+import {displayEvents, displayFiltreNEvents} from "./js/affichage_evenements";
 import Handlebars from 'handlebars';
-import { filtreParCateg, filterEventsByCategory } from './js/filtre';
-window.filterEventsByCategory = filterEventsByCategory;
+window.displayEvents = displayEvents;
+window.displayFiltreNEvents = displayFiltreNEvents;
 Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
 });
-filtreParCateg();
-displayEvents();

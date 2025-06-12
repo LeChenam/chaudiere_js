@@ -1,18 +1,19 @@
 import Handlebars from 'handlebars';
 import { getCategories } from './affichage_categories.js';
+import {displayFiltreParCateg, filtreParCateg} from "./filtre";
+import {log} from "../out";
 export async function displayEvents() {
     try {
         let events = getCurrentEvents(await getEvents());
+        console.log(events);
         const categories = await getCategories();
         const selectedCategory = document.querySelector('#categorySelect')?.value;
-        if (selectedCategory) {
-            events = events.filter(event => event.categorie_id === Number(selectedCategory));
-        }
+        events = filtreParCateg(selectedCategory, events);
+        console.log(events);
         if (!Array.isArray(events) || events.length === 0) {
-            document.querySelector('#listEvents').innerHTML = '<p>No events found.</p>';
+            document.querySelector('#listEvents').innerHTML += '<p>No events found.</p>';
             return;
         }
-
         const eventTemplate = document.querySelector('#eventsTemplate').innerHTML;
         const template = Handlebars.compile(eventTemplate);
         document.querySelector('#listEvents').innerHTML = template({ events, categories });
@@ -44,4 +45,9 @@ export function getCurrentEvents(events) {
         const eventDate = new Date(event?.date_debut ?? null);
         return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
     });
+}
+
+export function displayFiltreNEvents(){
+    displayFiltreParCateg();
+    displayEvents();
 }

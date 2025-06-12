@@ -2,21 +2,32 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>index td8 : fetch</title>
+    <title>La chaudière</title>
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
+    <div id="navbar">
+        <nav>
+            <ul>
+                <!--<li><a onclick="displayAccueil()">Accueil</a></li>-->
+                <li><a onclick="displayFiltreNEvents()">Événements</a></li>
+                <!--<li><a onclick="displayCategories()">Categories</a></li>-->
+            </ul>
+        </nav>
+    </div>
     <h1>La Chaudière</h1>
-    <div id="filtreCateg"></div>
-    <div id="listEvents"></div>
+    <div id="body"></div>
     <script id="filtreCategTemplate" type="text/x-handlebars-template">
+        <div id="filtreCateg">
         <h2>Filtrer par catégorie :</h2>
-        <select id="categorySelect" onchange="filterEventsByCategory()">
+        <select id="categorySelect" onchange="displayEvents()">
             <option value="">Toutes les catégories</option>
             {{#each categories}}
                 <option value="{{this.id}}">{{this.libelle}}</option>
             {{/each}}
         </select>
+        </div>
+        <div id="listEvents"></div>
     </script>
     <script id="eventsTemplate" type="text/x-handlebars-template">
         <h2>Liste des événements :</h2>
@@ -38,4 +49,5 @@
         </ul>
     </script>
     <script  src='out.js' defer ></script>
+
 </body>
