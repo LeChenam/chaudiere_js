@@ -7,6 +7,7 @@ import {
     filtreParTemps
 } from "./filtre";
 import {allCategories, allEvents, load} from "./load";
+import {displayTrie, trie} from "./trie";
 
 
 export function displayEvents(simplify = false, categId = null) {
@@ -14,15 +15,19 @@ export function displayEvents(simplify = false, categId = null) {
     let templateEvent = null;
     let section = null;
     let temps = null;
+    let typeTrie = null;
 
     if(simplify){
         templateEvent = document.querySelector('#simplifyEventsTemplate').innerHTML;
         section= document.querySelector(`#listEvents-${categId}`);
         temps= document.querySelector(`#tempsSelect-${categId}`)?.value;
+        typeTrie= document.querySelector(`#trieSelect-${categId}`)?.value;
+        console.log(typeTrie);
     }else{
         templateEvent = document.querySelector('#eventsTemplate').innerHTML;
         section = document.querySelector('#listEvents');
         temps= document.querySelector('#tempsSelect')?.value;
+        typeTrie= document.querySelector('#trieSelect')?.value;
     }
 
     if (!templateEvent || !section) {
@@ -34,6 +39,7 @@ export function displayEvents(simplify = false, categId = null) {
         let events = filtreParTemps(temps, allEvents);
         const selectedCategory = categId || document.querySelector('#categorySelect')?.value;
         events = filtreParCateg(selectedCategory, events);
+        events = trie(typeTrie, events);
 
         if (!Array.isArray(events) || events.length === 0) {
             section.innerHTML = '<p>No events found.</p>';
@@ -49,11 +55,13 @@ export function displayEvents(simplify = false, categId = null) {
 
 export function displayFiltreNEvents(){
     displayFiltreParTemps();
+    displayTrie();
     displayFiltreParCateg();
     displayEvents();
 }
 
 export function displaySimplifyFiltreNEvents(categId){
+    displayTrie(categId);
     displaySimplifyFiltreTemps(categId);
     displayEvents(true, categId);
 }

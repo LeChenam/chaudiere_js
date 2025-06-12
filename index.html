@@ -27,6 +27,26 @@
     </div>
 </script>
 
+<script id="trieTemplate" type="text/x-handlebars-template">
+    <div id="trie">
+        <label for="trieSelect">Trier par :</label>
+        <select id="trieSelect" onchange="displayEvents()">
+            <option value="dateAsc">Date ascendente</option>
+            <option value="dateDesc">Date descendente</option>
+            <option value="titre">Titre</option>
+        </select>
+    </div>
+</script>
+
+<script id="trieTemplateCateg" type="text/x-handlebars-template">
+        <label for="trieSelect-{{id}}">Trier par :</label>
+        <select id="trieSelect-{{id}}" onchange="displayEvents(true, '{{id}}')">
+            <option value="dateAsc" selected>Date ascendente</option>
+            <option value="dateDesc">Date descendente</option>
+            <option value="titre">Titre</option>
+        </select>
+</script>
+
 <script id="filtreCategTemplate" type="text/x-handlebars-template">
     <div id="filtreCateg">
         <label for="categorySelect">Filtrer par catégorie :</label>
@@ -91,6 +111,7 @@
                 <li>
                     <span class="category-item" onclick="toggleCategoryEvents('{{this.id}}')">{{this.libelle}}</span>
                     <div id="eventsForCategory-{{this.id}}" class="category-events" style="display: none;">
+                        <div id="trie-{{this.id}}"></div>
                         <div id="filtreTemps-{{this.id}}"></div>
                         <div id="listEvents-{{this.id}}"></div>
                     </div>
