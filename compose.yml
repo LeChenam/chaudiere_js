@@ -6,7 +6,7 @@ services:
       - .:/app
     command: bash -c "
       npm install &&
-      npx esbuild index.js --bundle --sourcemap --target=es2015 --outfile=out.js &&
+      npx esbuild index.js --bundle --sourcemap --target=es2015 --outfile=out.js --allow-overwrite &&
       npx serve . -l 3000"
     ports:
       - "13009:3000"
