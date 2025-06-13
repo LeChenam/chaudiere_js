@@ -1,34 +1,50 @@
+/* Variables CSS */
+:root {
+    --primary-color: #0056b3;
+    --secondary-color: #003d80;
+    --background-color: #f4f4f9;
+    --text-color: #333;
+    --heading-color: #222;
+    --card-background: #fff;
+    --card-border: #ddd;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+    --font-family: 'Roboto', sans-serif;
+    --transition-speed: 0.3s;
+}
+
 /* Global styles */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--font-family);
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
+    background-color: var(--background-color);
+    color: var(--text-color);
     line-height: 1.6;
 }
 
 h1, h2 {
     text-align: center;
-    color: #222;
+    color: var(--heading-color);
     margin-bottom: 20px;
 }
 
 a {
     text-decoration: none;
-    color: #0056b3;
+    color: var(--primary-color);
+    transition: color var(--transition-speed) ease;
 }
 
 a:hover {
     text-decoration: underline;
+    color: var(--secondary-color);
     cursor: pointer;
 }
 
 /* Navbar styles */
 #navbar {
-    background-color: #222;
+    background-color: var(--heading-color);
     padding: 15px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px var(--card-shadow);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -52,20 +68,22 @@ a:hover {
     font-size: 1.1em;
     padding: 10px 15px;
     border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
 #navbar nav ul li a:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-color);
     color: #fff;
-    text-decoration: none;
 }
 
 /* Body content */
 #body {
     padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
+/* Loading indicator */
 #loadingIndicator {
     text-align: center;
     font-style: italic;
@@ -76,10 +94,10 @@ a:hover {
 #accueil {
     text-align: center;
     padding: 30px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: var(--card-background);
+    border: 1px solid var(--card-border);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-shadow);
     max-width: 800px;
     margin: 0 auto;
 }
@@ -87,22 +105,22 @@ a:hover {
 #listCategories, #listEvents {
     margin: 30px auto;
     padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: var(--card-background);
+    border: 1px solid var(--card-border);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-shadow);
     max-width: 800px;
 }
 
 .category-item {
     cursor: pointer;
-    color: #0056b3;
+    color: var(--primary-color);
     font-weight: bold;
-    transition: color 0.3s ease;
+    transition: color var(--transition-speed) ease;
 }
 
 .category-item:hover {
-    color: #003d80;
+    color: var(--secondary-color);
     text-decoration: underline;
 }
 
@@ -112,7 +130,7 @@ a:hover {
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-shadow);
     max-width: 800px;
     margin: 0 auto;
 }
@@ -120,38 +138,53 @@ a:hover {
 .event-item {
     margin-bottom: 20px;
     padding: 15px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: var(--card-background);
+    border: 1px solid var(--card-border);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px var(--card-shadow);
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
 
 .event-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
-/* Style général pour la liste des catégories */
-#listCategories h2 {
-    font-size: 1.8em;
-    margin-bottom: 15px;
-    color: #333;
+/* Button styles */
+button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
 }
 
-/* Transition pour les événements */
-.category-events.show {
-    display: block;
-    animation: fadeIn 0.3s ease-in-out;
+button:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #navbar nav ul {
+        flex-direction: column;
+        align-items: center;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    #navbar nav ul li {
+        margin: 10px 0;
+    }
+
+    #body {
+        padding: 15px;
+    }
+
+    #listCategories, #listEvents {
+        padding: 15px;
     }
 }

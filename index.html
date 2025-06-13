@@ -143,14 +143,16 @@
     <script  src='out.js' defer ></script>
 
 <script id="simplifyEventsTemplate" type="text/x-handlebars-template">
-    <ul>
-        {{#each events}}
-            <li>
-                <h3>{{this.titre}}</h3>
-                <p><strong>Date :</strong> {{this.date_debut}}</p>
-            </li>
-        {{/each}}
-    </ul>
+        <ul>
+            {{#each events}}
+                <div class="event-item">
+                <li onclick="displayEventDetails('{{this.id}}')">
+                    <h3>{{this.titre}}</h3>
+                    <p><strong>Date :</strong> {{this.date_debut}}</p>
+                </li>
+                </div>
+            {{/each}}
+        </ul>
 </script>
 
 <script src="out.js" defer></script>
