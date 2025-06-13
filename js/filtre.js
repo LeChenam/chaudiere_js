@@ -40,7 +40,6 @@ export function filtreParCateg(categId, events) {
 }
 
 export function filtreParTemps(temps, events) {
-    console.log('Filtre par temps:', temps, 'pour', events.length, 'événements');
     if (temps === null || temps === "") {
         return events;
     } else {

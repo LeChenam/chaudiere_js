@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+import { marked } from 'marked';
 import {
     displayFiltreParCateg,
     displayFiltreParTemps,
@@ -9,9 +10,31 @@ import {
 import {allCategories, allEvents, load} from "./load";
 import {displayTrie, trie} from "./trie";
 
-
+export async function displayEventDetails(eventId) {
+    let eventLink = allEvents.find(e => e.id === Number(eventId));
+    if (!eventLink) {
+        console.error(`Event with ID ${eventId} not found.`);
+        return;
+    }
+    eventLink = eventLink.links.self.href;
+    eventLink = `http://docketu.iutnc.univ-lorraine.fr:13000${eventLink}`;
+    const response = await fetch(eventLink);
+    if (!response.ok) {
+        console.error(`Failed to fetch event details: ${response.status} ${response.statusText}`);
+        return;
+    }
+    const data = await response.json();
+    const event = data.evenement;
+    const description = marked.parse(event.description_md || '');
+    let imageLinks = null;
+    if (event.image !== null) {
+        imageLinks = `http://docketu.iutnc.univ-lorraine.fr:13000${event.image.href}`;
+    }
+    const detailsTemplate = document.querySelector('#eventTemplate').innerHTML;
+    const template = Handlebars.compile(detailsTemplate);
+    document.querySelector('#body').innerHTML = template({ event, categories: allCategories, description: new Handlebars.SafeString(description), image: imageLinks  });
+}
 export function displayEvents(simplify = false, categId = null) {
-    console.log("passe dans displayEvents", {simplify, categId});
     let templateEvent = null;
     let section = null;
     let temps = null;
@@ -22,7 +45,6 @@ export function displayEvents(simplify = false, categId = null) {
         section= document.querySelector(`#listEvents-${categId}`);
         temps= document.querySelector(`#tempsSelect-${categId}`)?.value;
         typeTrie= document.querySelector(`#trieSelect-${categId}`)?.value;
-        console.log(typeTrie);
     }else{
         templateEvent = document.querySelector('#eventsTemplate').innerHTML;
         section = document.querySelector('#listEvents');

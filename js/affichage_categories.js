@@ -23,7 +23,6 @@ export function toggleCategoryEvents(categoryId) {
     const eventsContainer = document.querySelector(`#eventsForCategory-${categoryId}`);
     if (eventsContainer.style.display === 'none') {
         const events = filtreParCateg(categoryId, allEvents);
-        console.log(`Events for category ${categoryId}:`, events);
         if (events.length > 0) {
             displaySimplifyFiltreNEvents(categoryId);
         } else {

@@ -2,7 +2,7 @@ export var allEvents = null;
 export var allCategories = null;
 export async function load() {
     try {
-        const response = await fetch('http://localhost:13000/api/evenements', { method: 'GET' });
+        const response = await fetch('http://docketu.iutnc.univ-lorraine.fr:13000/api/evenements', { method: 'GET' });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -13,7 +13,7 @@ export async function load() {
         return [];
     }
     try {
-        const response = await fetch('http://localhost:13000/api/categories');
+        const response = await fetch('http://docketu.iutnc.univ-lorraine.fr:13000/api/categories');
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
