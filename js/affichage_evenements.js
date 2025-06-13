@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+import { marked } from 'marked';
 import {
     displayFiltreParCateg,
     displayFiltreParTemps,
@@ -9,7 +10,31 @@ import {
 import {allCategories, allEvents, load} from "./load";
 import {displayTrie, trie} from "./trie";
 
+export async function displayEventDetails(eventId) {
+    console.log(allEvents);
+    let eventLink = allEvents.find(e => e.id === Number(eventId));
+    if (!eventLink) {
+        console.error(`Event with ID ${eventId} not found.`);
+        return;
+    }
+    eventLink = eventLink.links.self.href;
+    console.log(eventLink);
+    eventLink = `http://localhost:13000${eventLink}`;
+    console.log(eventLink);
+    const response = await fetch(eventLink);
+    if (!response.ok) {
+        console.error(`Failed to fetch event details: ${response.status} ${response.statusText}`);
+        return;
+    }
+    const data = await response.json();
+    const event = data.evenement;
+    console.log(event);
+    const description = marked.parse(event.description_md || '');
 
+    const detailsTemplate = document.querySelector('#eventTemplate').innerHTML;
+    const template = Handlebars.compile(detailsTemplate);
+    document.querySelector('#body').innerHTML = template({ event, categories: allCategories, description: new Handlebars.SafeString(description)  });
+}
 export function displayEvents(simplify = false, categId = null) {
     console.log("passe dans displayEvents", {simplify, categId});
     let templateEvent = null;

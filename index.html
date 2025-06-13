@@ -86,7 +86,7 @@
     <h2>Liste des événements :</h2>
     <ul>
         {{#each events}}
-            <li>
+            <li onclick="displayEventDetails('{{this.id}}')">
                 <div class="event-item">
                     <h3>{{this.titre}}</h3>
                     <p><strong>Catégorie :</strong>
@@ -131,13 +131,13 @@
                     {{/if}}
                 {{/each}}</p>
             {{#if event.image}}
-                <img src="{{event.image}}" alt="{{event.titre}}" class="event-image">
+                <img src="{{event.image}}" alt="{{event.image.href}}" class="event-image">
             {{/if}}
             <p><strong>Date :</strong> {{event.date_debut}}</p>
             {{#if event.date_fin}}
                 <p><strong>Date de fin :</strong> {{event.date_fin}}</p>
             {{/if}}
-            <p><strong>Description :</strong> {{event.description}}</p>
+            <p><strong>Description :</strong> {{description}}</p>
         </div>
     </script>
     <script  src='out.js' defer ></script>
